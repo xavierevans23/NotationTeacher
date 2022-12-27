@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NotesAndScales">
+      <HintPath>..\..\NotesAndScales\NotesAndScales\bin\Release\net6.0\NotesAndScales.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
