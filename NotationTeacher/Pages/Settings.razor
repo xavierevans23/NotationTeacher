@@ -1,9 +1,18 @@
-﻿@page "/settings"
+﻿@using NotesAndScales
+@page "/settings"
 
 <PageTitle>Settings</PageTitle>
 
 <h1>Settings</h1>
 <MidiInputBanner></MidiInputBanner>
+<StaveDisplay @ref="staveDisplay"></StaveDisplay>
+<button @onclick="Add">Draw C</button>
 
 @code {
+    private StaveDisplay? staveDisplay;
+
+    public void Add()
+    {
+        staveDisplay?.SetNotes(new() { new(Letter.C, Accidental.Natural, 4) }, "q", 1, 4, "4/4", "treble");
+    }
 }

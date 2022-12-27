@@ -1,0 +1,48 @@
+﻿@inject IJSRuntime JS
+@using NotesAndScales;
+
+<center>
+    <div id="@className"></div>
+</center>
+
+@code {
+
+    public void SetNotes(List<NoteLabel> notes, string noteDuration, int timeSignatureTop, int timeSignatureBottom, string timeSignatureString, string cleff)
+    {
+        notes.Sort((a, b) => new Note(a).Number - new Note(b).Number);
+
+        List<string> noteNames = new();
+        List<string> noteAccidentals = new();
+
+        foreach (NoteLabel note in notes)
+        {
+            noteNames.Add($"{note.PitchClass.Letter}/{note.Octave}");
+
+            if (note.PitchClass.Accidental == Accidental.Flat)
+            {
+                noteAccidentals.Add("b");
+            }
+            else if (note.PitchClass.Accidental == Accidental.Sharp)
+            {
+                noteAccidentals.Add("#");
+            }
+            else
+            {
+                noteAccidentals.Add("none");
+            }
+        }
+
+        JS.InvokeVoidAsync("draw", className, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, cleff);
+    }
+
+    private string className = RandomString(5);
+
+    private static Random random = new Random();
+
+    public static string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+}
