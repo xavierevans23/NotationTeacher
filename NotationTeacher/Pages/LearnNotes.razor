@@ -30,11 +30,6 @@
 
 <br />
 <div class="div-box">
-    <p><b>Options</b></p>
-</div>
-
-<br />
-<div class="div-box">
 
     <style>
         .side-text {
@@ -70,7 +65,7 @@
         <table>
             <tr>
                 <th></th>
-                <th>Total Attempts</th>                
+                <th>Total Attempts</th>
                 <th>Rating</th>
             </tr>
             @foreach (NoteData data in DataService.DataHolder.NoteLearningData.TrebleNotes)
@@ -78,7 +73,7 @@
                 int successCount = data.CountAttempts();
                 <tr>
                     <th style="background-color:@(successCount >= DataService.DataHolder.NoteLearningData.GoodNoteThreshold ? "#76fe8d" : (successCount > 0 ? "#ff794d" : "#969696"));">@(new Note(data.Note).Name)</th>
-                    <td>@data.TotalAttempts</td>                    
+                    <td>@data.TotalAttempts</td>
                     <td>@(successCount)/5</td>
                 </tr>
             }
@@ -89,7 +84,7 @@
         <table>
             <tr>
                 <th></th>
-                <th>Total Attempts</th>                
+                <th>Total Attempts</th>
                 <th>Rating</th>
             </tr>
             @foreach (NoteData data in DataService.DataHolder.NoteLearningData.BassNotes)
@@ -97,7 +92,7 @@
                 int successCount = data.CountAttempts();
                 <tr>
                     <th style="background-color:@(successCount >= DataService.DataHolder.NoteLearningData.GoodNoteThreshold ? "#76fe8d" : (successCount > 0 ? "#ff794d" : "#969696"));">@(new Note(data.Note).Name)</th>
-                    <td>@data.TotalAttempts</td>                    
+                    <td>@data.TotalAttempts</td>
                     <td>@(successCount)/5</td>
                 </tr>
             }
@@ -105,16 +100,47 @@
         <br />
     }
 </div>
+<br />
 
+<div class="div-box">
+    <h2>Options</h2>
+
+    <label>Use timer</label>
+    <input @bind="useTimer" type="checkbox">
+    <br />
+
+    <label>Time (in seconds)</label>
+    <input type="text" @bind="timerInputText" disabled="@(!useTimer)">
+    <br />
+    <br />
+
+    <label>Clef</label>
+    <select @bind="cleffSelectionString">
+        <option value="bass">Bass Cleff</option>
+        <option value="treble">Treble Cleff</option>
+        <option value="both">Both</option>
+    </select>
+    <br />
+    <br />
+    <button @onclick="() => GetNote(true)">Skip Note</button>
+    <br />
+    <br />
+</div>
 <br />
 
 @code {
     private NoteData currentNote = new();
     private Note? inputNote = null;
-    private DateTime timeRecieved = DateTime.Now;
+    private DateTime timeRecieved = DateTime.Now;    
 
     private readonly Queue<string> feedback = new Queue<string>(new[] { "⠀", "⠀", "⠀", "⠀", "⠀", "⠀", "⠀" });
     private readonly Random random = new();
+
+    private bool useTimer = false;
+    private string timerInputText = "2";
+    private float timerLength => float.TryParse(timerInputText, out float time) ? time : 2;
+
+    private string cleffSelectionString = "both";
 
     public void GetNote(bool requireNew)
     {
@@ -123,7 +149,22 @@
         int attempts = 5;
         while (currentNote == oldNote && attempts > 0 && requireNew)
         {
-            currentNote = DataService.DataHolder.NoteLearningData.GetNextNote(random.Next(2) == 0);
+            bool useTrebleCleff;
+
+            if (cleffSelectionString == "treble")
+            {
+                useTrebleCleff = true;
+            }
+            else if (cleffSelectionString == "bass")
+            {
+                useTrebleCleff = false;        
+            }
+            else
+            {
+                useTrebleCleff = random.Next(2) == 0;
+            }
+
+            currentNote = DataService.DataHolder.NoteLearningData.GetNextNote(useTrebleCleff);
             attempts--;
         }
 
@@ -134,11 +175,11 @@
     public void GiveNote()
     {
         bool correct = inputNote is not null && inputNote.Number == currentNote.Note;
-        bool inTime = (DateTime.Now - timeRecieved).TotalSeconds < 5;
+        bool inTime = (DateTime.Now - timeRecieved).TotalSeconds < timerLength;
 
         if (correct)
         {
-            if (inTime)
+            if (inTime || !useTimer)
             {
                 feedback.Enqueue($"{new Note(currentNote.Note).Name} ✔️");
             }
