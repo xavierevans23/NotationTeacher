@@ -1,0 +1,130 @@
+﻿@page "/learnnotes"
+@using NotesAndScales
+@inject NoteInputService NoteInputService
+@inject DataService DataService
+@implements IDisposable
+
+<PageTitle>Learn Notes</PageTitle>
+
+<style>
+    .div-box {
+        border: 5px solid black;
+        padding-top: 15px;
+        padding-left: 15px;
+    }
+</style>
+
+<div class="div-box">
+    <MidiInputBanner></MidiInputBanner>
+</div>
+
+<StaveDisplay @ref="staveDisplay"></StaveDisplay>
+
+<br />
+<div class="div-box">
+    <p><b>Notes as played</b></p>
+</div>
+
+<br />
+<div class="div-box">
+    <p><b>Options</b></p>
+</div>
+
+<br />
+<div class="div-box">
+
+    <style>
+        .side-text {
+            display: block;
+        }
+
+        .side-text-container {
+            padding-right: 15px;
+        }
+
+        .side-text-button {
+            float: right;
+            height: 40px;
+        }
+    </style>
+
+    <div class="side-text-container">
+        <button class="side-text-button" @onclick="ToggleBox">@(dataExpanded ? "Contract" : "Expand")</button>
+        <h2 class="side-text">Data</h2>
+    </div>
+
+    @if (dataExpanded)
+    {
+        <p><b>Data expandable</b></p>
+    }
+</div>
+
+@code {
+    private NoteData currentNote = new();
+    private Note? inputNote = null;
+    private DateTime timeRecieved = DateTime.Now;
+
+    private readonly List<string> feedback = new();
+    private readonly Random random = new();
+
+    public void GetNote(bool requireNew)
+    {
+        NoteData oldNote = currentNote;
+
+        int attempts = 5;
+        while (currentNote == oldNote && attempts > 0 && requireNew)
+        {
+            currentNote = DataService.DataHolder.NoteLearningData.GetNextNote(random.Next(2) == 0);
+            attempts--;
+        }        
+
+        inputNote = null;
+        timeRecieved = DateTime.Now;
+    }
+
+    public void GiveNote()
+    {
+        bool correct = inputNote is not null && inputNote.Number == currentNote.Note;
+
+        DataService.DataHolder.NoteLearningData.GiveResult(currentNote, correct);
+        GetNote(correct);
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnParametersSet()
+    {
+        NoteInputService.NoteUpdate += RecieveUpdate;
+    }
+
+    public void Dispose()
+    {
+        NoteInputService.NoteUpdate -= RecieveUpdate;
+    }
+
+    public void RecieveUpdate(object? sender, EventArgs e)
+    {
+        if (NoteInputService.Notes.Count > 0)
+        {
+            inputNote = NoteInputService.Notes.Last();
+            GiveNote();
+            NoteInputService.Clear();
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    private StaveDisplay? staveDisplay;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        staveDisplay?.SetNotes(new() { new Note(currentNote.Note).Name }, "q", 1, 4, "4/4", currentNote.UseTrebleCleff ? "treble" : "bass");
+    }
+
+    private bool dataExpanded = false;
+
+    public void ToggleBox()
+    {
+        dataExpanded = !dataExpanded;
+    }
+}
