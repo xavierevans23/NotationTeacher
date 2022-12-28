@@ -10,8 +10,12 @@
 <button @onclick="Add">Draw C</button>
 <button @onclick="Cerealise">Test serialization</button>
 <button @onclick="GetNote">Random note</button>
+<button @onclick="Save">Save</button>
+<button @onclick="Update">Update Screen</button>
 <textarea @bind="area"></textarea>
 <p>@randomNote</p>
+<p>@(DataService.LoadedFromStorage)</p>
+<p>@(DataService.DataHolder.TimeCreated)</p>
 
 @code {
     private StaveDisplay? staveDisplay;
@@ -48,4 +52,16 @@
         randomNote = new Note(d.Note).Name.ToString();
         DataService.DataHolder.NoteLearningData.GiveResult(d, true);
     }
+
+    public async Task Save()
+    {
+        await DataService.SaveData();
+        await InvokeAsync(StateHasChanged);
+    }
+     public async Task Update()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+    
+    
 }

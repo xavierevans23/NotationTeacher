@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject DataService DataService
 
 <div class="page">
     <div class="sidebar">
@@ -15,3 +16,12 @@
         </article>
     </main>
 </div>
+
+
+@code {
+    protected override async Task OnParametersSetAsync()
+    {
+        await DataService.LoadData();
+        await InvokeAsync(StateHasChanged);
+    }
+}
