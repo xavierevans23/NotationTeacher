@@ -1,4 +1,5 @@
 ﻿@using NotesAndScales
+@using System.Xml.Serialization
 @page "/settings"
 
 <PageTitle>Settings</PageTitle>
@@ -7,6 +8,8 @@
 <MidiInputBanner></MidiInputBanner>
 <StaveDisplay @ref="staveDisplay"></StaveDisplay>
 <button @onclick="Add">Draw C</button>
+<button @onclick="Cerealise">Test serialization</button>
+<textarea @bind="area"></textarea>
 
 @code {
     private StaveDisplay? staveDisplay;
@@ -14,5 +17,29 @@
     public void Add()
     {
         staveDisplay?.SetNotes(new() { new(Letter.C, Accidental.Natural, 4) }, "q", 1, 4, "4/4", "treble");
+    }
+
+    private string area = "empty";
+
+    public void Cerealise()
+    {
+        var serializer = new XmlSerializer(typeof(NoteLearningData));
+        using var writer = new StringWriter();
+        var g = new NoteLearningData();
+        g.TrebleNotes[0].AddAttempt(false);
+        g.TrebleNotes[0].AddAttempt(true);
+        g.TrebleNotes[0].AddAttempt(false);
+        serializer.Serialize(writer, g);
+        area = writer.ToString();
+
+        var serializer1 = new XmlSerializer(typeof(NoteLearningData));
+            using (var reader = new StringReader(area))
+            {
+                if (serializer.Deserialize(reader) is NoteLearningData holder)
+                {
+                    Console.WriteLine(g.TrebleNotes[0].CountAttempts());
+                    Console.WriteLine(g.TrebleNotes[0].TotalAttempts);
+                }
+            }
     }
 }

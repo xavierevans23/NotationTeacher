@@ -28,8 +28,7 @@ namespace NotationTeacher
 
         public void NoteDown(Note note)
         {
-            notes.Add(note);
-            Console.WriteLine(note);
+            notes.Add(note);            
             OnNoteUpdate();
         }
 
