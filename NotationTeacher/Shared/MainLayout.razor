@@ -19,9 +19,15 @@
 
 
 @code {
+    private static bool alreadyLoaded = false;
+
     protected override async Task OnParametersSetAsync()
     {
-        await DataService.LoadData();
-        await InvokeAsync(StateHasChanged);
+        if (!alreadyLoaded)
+        {
+            alreadyLoaded = true;
+            await DataService.LoadData();
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }

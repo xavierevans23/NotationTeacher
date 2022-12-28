@@ -58,7 +58,51 @@
 
     @if (dataExpanded)
     {
-        <p><b>Data expandable</b></p>
+        <style>
+            th, td {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        </style>
+
+        <h3>Treble Notes</h3>
+
+        <table>
+            <tr>
+                <th></th>
+                <th>Total Attempts</th>                
+                <th>Rating</th>
+            </tr>
+            @foreach (NoteData data in DataService.DataHolder.NoteLearningData.TrebleNotes)
+            {
+                int successCount = data.CountAttempts();
+                <tr>
+                    <th style="background-color:@(successCount >= DataService.DataHolder.NoteLearningData.GoodNoteThreshold ? "#76fe8d" : (successCount > 0 ? "#ff794d" : "#969696"));">@(new Note(data.Note).Name)</th>
+                    <td>@data.TotalAttempts</td>                    
+                    <td>@(successCount)/5</td>
+                </tr>
+            }
+        </table>
+        <br />
+        <h3>Bass Notes</h3>
+
+        <table>
+            <tr>
+                <th></th>
+                <th>Total Attempts</th>                
+                <th>Rating</th>
+            </tr>
+            @foreach (NoteData data in DataService.DataHolder.NoteLearningData.BassNotes)
+            {
+                int successCount = data.CountAttempts();
+                <tr>
+                    <th style="background-color:@(successCount >= DataService.DataHolder.NoteLearningData.GoodNoteThreshold ? "#76fe8d" : (successCount > 0 ? "#ff794d" : "#969696"));">@(new Note(data.Note).Name)</th>
+                    <td>@data.TotalAttempts</td>                    
+                    <td>@(successCount)/5</td>
+                </tr>
+            }
+        </table>
+        <br />
     }
 </div>
 
