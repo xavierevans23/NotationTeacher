@@ -1,6 +1,7 @@
 ﻿@using NotesAndScales
 @using System.Xml.Serialization
 @page "/settings"
+@inject DataService DataService
 
 <PageTitle>Settings</PageTitle>
 
@@ -9,7 +10,9 @@
 <StaveDisplay @ref="staveDisplay"></StaveDisplay>
 <button @onclick="Add">Draw C</button>
 <button @onclick="Cerealise">Test serialization</button>
+<button @onclick="GetNote">Random note</button>
 <textarea @bind="area"></textarea>
+<p>@randomNote</p>
 
 @code {
     private StaveDisplay? staveDisplay;
@@ -20,6 +23,8 @@
     }
 
     private string area = "empty";
+    private string randomNote = "";
+
 
     public void Cerealise()
     {
@@ -33,13 +38,20 @@
         area = writer.ToString();
 
         var serializer1 = new XmlSerializer(typeof(NoteLearningData));
-            using (var reader = new StringReader(area))
+        using (var reader = new StringReader(area))
+        {
+            if (serializer.Deserialize(reader) is NoteLearningData holder)
             {
-                if (serializer.Deserialize(reader) is NoteLearningData holder)
-                {
-                    Console.WriteLine(g.TrebleNotes[0].CountAttempts());
-                    Console.WriteLine(g.TrebleNotes[0].TotalAttempts);
-                }
+                Console.WriteLine(g.TrebleNotes[0].CountAttempts());
+                Console.WriteLine(g.TrebleNotes[0].TotalAttempts);
             }
+        }
+    }
+
+    public void GetNote()
+    {
+        NoteData d = DataService.DataHolder.NoteLearningData.GetNextNote(true);
+        randomNote = new Note( d.Note).Name.ToString();
+        DataService.DataHolder.NoteLearningData.GiveResult(d, true);
     }
 }
