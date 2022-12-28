@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotationTeacher", "NotationTeacher\NotationTeacher.csproj", "{2CFA8C9E-1FCE-4E2B-82AB-D977B7BB1AC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotationTeacher", "NotationTeacher\NotationTeacher.csproj", "{2CFA8C9E-1FCE-4E2B-82AB-D977B7BB1AC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

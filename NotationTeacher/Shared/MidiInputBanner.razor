@@ -2,9 +2,11 @@
 @inject IJSRuntime JS
 @using NotesAndScales
 
-<h3>MidiInputBanner</h3>
-<p>@ConnectionStatus</p>
-<button @onclick="Connect">Connect</button>
+<h3>Using midi input</h3>
+<p>@(StatusNames[ConnectionStatus] + (ConnectionStatus == MidiConnectionStatus.Connected ? $" to {(DeviceName is not null ? DeviceName : "[name was null].")}" : ""))</p>
+<button @onclick="Connect">@(ConnectionStatus == MidiConnectionStatus.Connected ? "Reconnect" : "connect")</button>
+<br />
+<br />
 
 @code {
     public enum MidiConnectionStatus
@@ -15,6 +17,15 @@
         NoMidiDevices,
         NoMidiSupport
     }
+
+    public static readonly IReadOnlyDictionary<MidiConnectionStatus, string> StatusNames = new Dictionary<MidiConnectionStatus, string>()
+    {
+        {MidiConnectionStatus.Connected ,"Connected"},
+        {MidiConnectionStatus.NotConnected ,"Not connected"},
+        {MidiConnectionStatus.MidiAccessOnly ,"Connected, but failed to get midi devices."},
+        {MidiConnectionStatus.NoMidiDevices ,"Couldn't find midi devices."},
+        {MidiConnectionStatus.NoMidiSupport ,"Browser doesn't support midi devices."}
+    };
 
     public static MidiConnectionStatus ConnectionStatus { get; private set; } = MidiConnectionStatus.NotConnected;
 

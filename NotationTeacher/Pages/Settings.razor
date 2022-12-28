@@ -17,10 +17,12 @@ else
 }
 
 <h3>Manage loaded data</h3>
+<a href="resetdata">Reset data</a>
+<br />
+<br />
 <button @onclick="Save">Save now</button>
 <button @onclick="Export">Export</button>
 <button @onclick="Import">Import</button>
-<button @onclick="ResetData">Reset data</button>
 <br />
 <br />
 
@@ -41,12 +43,7 @@ else
     {
         await DataService.SaveData();
         await InvokeAsync(StateHasChanged);
-    }
-
-    public void ResetData()
-    {
-        DataService.ResetData();        
-    }
+    }  
 
     private string textAreaText = "Use this textbox to import and export data.";
 

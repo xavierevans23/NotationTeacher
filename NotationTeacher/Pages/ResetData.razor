@@ -1,0 +1,16 @@
+﻿@page "/resetdata"
+@inject DataService DataService
+
+<PageTitle>Reset data</PageTitle>
+
+<a href="settings">Back</a>
+<br />
+<br />
+<button @onclick="Reset">Click here to delete all data</button>
+
+@code {
+    public void Reset()
+    {
+        DataService.ResetData();
+    }
+}

@@ -50,7 +50,7 @@
     </style>
 
     <div class="side-text-container">
-        <button class="side-text-button" @onclick="ToggleBox">@(dataExpanded ? "Contract" : "Expand")</button>
+        <button class="side-text-button" @onclick="ToggleBox">@(dataExpanded ? "Collaspse" : "Expand")</button>
         <h2 class="side-text">Data</h2>
     </div>
 
@@ -201,6 +201,7 @@
         DataService.DataHolder.NoteLearningData.GiveResult(currentNote, correct && inTime);
         GetNote(correct);
 
+        Task.Run(DataService.SaveData);
         InvokeAsync(StateHasChanged);
     }
 
