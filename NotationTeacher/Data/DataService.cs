@@ -15,6 +15,25 @@ namespace NotationTeacher
             DataHolder = new();
         }
 
+        public void ResetData()
+        {
+            LoadedFromStorage = false;
+            DataHolder = new();
+        }
+
+        public void LoadXml(string xml)
+        {
+            LoadedFromStorage = false;
+            try
+            {
+                DataHolder = DataHolder.FromXml(xml);                
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to load data from the xml given.");
+            }
+        }
+
         public async Task LoadData()
         {
             string data = await localStorage.GetItemAsync<string>("XmlData");
@@ -33,7 +52,9 @@ namespace NotationTeacher
         {
             if (DataHolder is not null)
             {
+                DataHolder.TimeSaved = DateTime.Now;
                 await localStorage.SetItemAsync("XmlData", DataHolder.ToXml());
+                Console.WriteLine("Saved data successfully");
             }
         }
     }

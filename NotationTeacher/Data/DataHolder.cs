@@ -7,9 +7,11 @@ namespace NotationTeacher
         public NoteLearningData NoteLearningData { get; set; } = new();
 
         [XmlIgnore]
-        public DateTime TimeLoaded { get; private set; } = DateTime.Now;
+        public DateTime TimeLoaded { get;} = DateTime.Now;
 
         public DateTime TimeCreated { get; set; } = DateTime.Now;
+
+        public DateTime? TimeSaved {get; set; } = null;
 
         public string ToXml()
         {

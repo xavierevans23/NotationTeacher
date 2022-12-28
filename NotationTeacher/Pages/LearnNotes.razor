@@ -21,6 +21,9 @@
 <StaveDisplay @ref="staveDisplay"></StaveDisplay>
 
 <br />
+<button @onclick="() => GetNote(true)">Skip Note</button>
+<br />
+<br />
 <div class="div-box">
     @foreach (string text in feedback.Reverse())
     {
@@ -121,10 +124,7 @@
         <option value="both">Both</option>
     </select>
     <br />
-    <br />
-    <button @onclick="() => GetNote(true)">Skip Note</button>
-    <br />
-    <br />
+    <br />    
 </div>
 <br />
 

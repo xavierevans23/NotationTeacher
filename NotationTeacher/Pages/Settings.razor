@@ -4,62 +4,60 @@
 
 <PageTitle>Settings</PageTitle>
 
-<h1>Settings</h1>
-<MidiInputBanner></MidiInputBanner>
-<StaveDisplay @ref="staveDisplay"></StaveDisplay>
-<button @onclick="Add">Draw C</button>
-<button @onclick="Cerealise">Test serialization</button>
-<button @onclick="GetNote">Random note</button>
-<button @onclick="Save">Save</button>
-<button @onclick="Update">Update Screen</button>
-<textarea @bind="area"></textarea>
-<p>@randomNote</p>
-<p>@(DataService.LoadedFromStorage)</p>
-<p>@(DataService.DataHolder.TimeCreated)</p>
+<h2>Loaded data</h2>
+<p>Made at @(DataService.DataHolder.TimeCreated)@(DataService.LoadedFromStorage ? "" : " (was not loaded from storage).")</p>
+<p>Loaded at @(DataService.DataHolder.TimeLoaded)</p>
+@if (DataService.DataHolder.TimeSaved is not null)
+{
+    <p>Last saved at @(DataService.DataHolder.TimeSaved)</p>
+}
+else
+{
+    <p>Has never been saved.</p>
+}
+
+<h3>Manage loaded data</h3>
+<button @onclick="Save">Save now</button>
+<button @onclick="Export">Export</button>
+<button @onclick="Import">Import</button>
+<button @onclick="ResetData">Reset data</button>
+<br />
+<br />
+
+<style>
+    .xml-text-area {
+        width: 100%;
+        height: calc(80vh - 400px);
+    }
+</style>
+
+<code>
+    <textarea class="xml-text-area" @bind="textAreaText"></textarea>
+</code>
 
 @code {
-    private StaveDisplay? staveDisplay;
-
-    public void Add()
-    {
-        staveDisplay?.SetNotes(new() { new(Letter.C, Accidental.Natural, 4) }, "q", 1, 4, "4/4", "treble");
-    }
-
-    private string area = "empty";
-    private string randomNote = "";
-
-
-    public void Cerealise()
-    {
-        var g = new NoteLearningData();
-        g.TrebleNotes[0].AddAttempt(false);
-        g.TrebleNotes[0].AddAttempt(true);
-        g.TrebleNotes[0].AddAttempt(false);
-
-        DataService.DataHolder.NoteLearningData = g;
-
-        area = DataService.DataHolder.ToXml();
-
-        NoteLearningData holder = DataHolder.FromXml(area).NoteLearningData;
-
-        Console.WriteLine(holder.TrebleNotes[0].CountAttempts());
-        Console.WriteLine(holder.TrebleNotes[0].TotalAttempts);
-    }
-
-    public void GetNote()
-    {
-        NoteData d = DataService.DataHolder.NoteLearningData.GetNextNote(true);
-        randomNote = new Note(d.Note).Name.ToString();
-        DataService.DataHolder.NoteLearningData.GiveResult(d, true);
-    }
 
     public async Task Save()
     {
         await DataService.SaveData();
         await InvokeAsync(StateHasChanged);
     }
-     public async Task Update()
+
+    public void ResetData()
     {
-        await InvokeAsync(StateHasChanged);
+        DataService.ResetData();        
+    }
+
+    private string textAreaText = "Use this textbox to import and export data.";
+
+    public void Import()
+    {
+        DataService.LoadXml(textAreaText);
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Export()
+    {
+        textAreaText = DataService.DataHolder.ToXml();
     }
 }
