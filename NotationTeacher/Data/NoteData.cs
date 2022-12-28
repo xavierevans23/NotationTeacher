@@ -10,18 +10,7 @@
         public int TurnsElapsed { get; set; } = 1000;
 
         public int MaxAttempts { get; set; } = 5;
-        private Queue<bool> attemptHistory { get; set; } = new();    
-        public List<bool> AttemptHistory
-        {
-            get
-            {
-                return attemptHistory.ToList();
-            }
-            set
-            {
-                attemptHistory = new(value);
-            }
-        }
+        public List<bool> AttemptHistory { get; set; } = new();
 
         public int CountAttempts()
         {
@@ -38,12 +27,12 @@
 
         public void AddAttempt(bool correct)
         {
-            while (attemptHistory.Count >= MaxAttempts)
+            while (AttemptHistory.Count >= MaxAttempts)
             {
-                attemptHistory.Dequeue();
+                AttemptHistory.RemoveAt(0);
             }
-            
-            attemptHistory.Enqueue(correct);
+
+            AttemptHistory.Add(correct);
             TotalAttempts++;
             TurnsElapsed = 0;
         }

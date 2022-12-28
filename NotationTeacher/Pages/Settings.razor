@@ -1,5 +1,4 @@
 ﻿@using NotesAndScales
-@using System.Xml.Serialization
 @page "/settings"
 @inject DataService DataService
 
@@ -28,30 +27,25 @@
 
     public void Cerealise()
     {
-        var serializer = new XmlSerializer(typeof(NoteLearningData));
-        using var writer = new StringWriter();
         var g = new NoteLearningData();
         g.TrebleNotes[0].AddAttempt(false);
         g.TrebleNotes[0].AddAttempt(true);
         g.TrebleNotes[0].AddAttempt(false);
-        serializer.Serialize(writer, g);
-        area = writer.ToString();
 
-        var serializer1 = new XmlSerializer(typeof(NoteLearningData));
-        using (var reader = new StringReader(area))
-        {
-            if (serializer.Deserialize(reader) is NoteLearningData holder)
-            {
-                Console.WriteLine(g.TrebleNotes[0].CountAttempts());
-                Console.WriteLine(g.TrebleNotes[0].TotalAttempts);
-            }
-        }
+        DataService.DataHolder.NoteLearningData = g;
+
+        area = DataService.DataHolder.ToXml();
+
+        NoteLearningData holder = DataHolder.FromXml(area).NoteLearningData;
+
+        Console.WriteLine(holder.TrebleNotes[0].CountAttempts());
+        Console.WriteLine(holder.TrebleNotes[0].TotalAttempts);
     }
 
     public void GetNote()
     {
         NoteData d = DataService.DataHolder.NoteLearningData.GetNextNote(true);
-        randomNote = new Note( d.Note).Name.ToString();
+        randomNote = new Note(d.Note).Name.ToString();
         DataService.DataHolder.NoteLearningData.GiveResult(d, true);
     }
 }
