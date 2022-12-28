@@ -22,7 +22,10 @@
 
 <br />
 <div class="div-box">
-    <p><b>Notes as played</b></p>
+    @foreach (string text in feedback.Reverse())
+    {
+        <p><b>@text</b></p>
+    }
 </div>
 
 <br />
@@ -59,12 +62,14 @@
     }
 </div>
 
+<br />
+
 @code {
     private NoteData currentNote = new();
     private Note? inputNote = null;
     private DateTime timeRecieved = DateTime.Now;
 
-    private readonly List<string> feedback = new();
+    private readonly Queue<string> feedback = new Queue<string>(new[] { "⠀", "⠀", "⠀", "⠀", "⠀", "⠀", "⠀" });
     private readonly Random random = new();
 
     public void GetNote(bool requireNew)
@@ -76,7 +81,7 @@
         {
             currentNote = DataService.DataHolder.NoteLearningData.GetNextNote(random.Next(2) == 0);
             attempts--;
-        }        
+        }
 
         inputNote = null;
         timeRecieved = DateTime.Now;
@@ -85,8 +90,30 @@
     public void GiveNote()
     {
         bool correct = inputNote is not null && inputNote.Number == currentNote.Note;
+        bool inTime = (DateTime.Now - timeRecieved).TotalSeconds < 5;
 
-        DataService.DataHolder.NoteLearningData.GiveResult(currentNote, correct);
+        if (correct)
+        {
+            if (inTime)
+            {
+                feedback.Enqueue($"{new Note(currentNote.Note).Name} ✔️");
+            }
+            else
+            {
+                feedback.Enqueue($"{new Note(currentNote.Note).Name} ⏱");
+            }
+        }
+        else
+        {
+            feedback.Enqueue($"{new Note(currentNote.Note).Name} ❌ (You played {(inputNote is not null ? inputNote.Name : "null")})");
+        }
+
+        while (feedback.Count > 7)
+        {
+            feedback.Dequeue();
+        }
+
+        DataService.DataHolder.NoteLearningData.GiveResult(currentNote, correct && inTime);
         GetNote(correct);
 
         InvokeAsync(StateHasChanged);
