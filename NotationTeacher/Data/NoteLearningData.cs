@@ -133,7 +133,7 @@ namespace NotationTeacher
                 index++;
             }
 
-            bool useGoodNotes = random.Next(GoodNoteChance) <= GoodNoteThreshold;
+            bool useGoodNotes = random.Next(100) <= GoodNoteChance;
 
             if (useGoodNotes && goodNotes.Count > 0)
             {
