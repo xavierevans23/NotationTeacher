@@ -19,15 +19,17 @@
 
 
 @code {
+    // When the app first opens, it needs to retrieve any saved data from storage.
     private static bool alreadyLoaded = false;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!alreadyLoaded)
+        if (!alreadyLoaded && firstRender)
         {
             alreadyLoaded = true;
             await DataService.LoadData();
             await InvokeAsync(StateHasChanged);
+            Console.WriteLine("Loaded data from storage");
         }
     }
 }

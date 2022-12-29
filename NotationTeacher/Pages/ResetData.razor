@@ -1,5 +1,6 @@
 ﻿@page "/resetdata"
 @inject DataService DataService
+@inject NavigationManager NavManager
 
 <PageTitle>Reset data</PageTitle>
 
@@ -12,5 +13,6 @@
     public void Reset()
     {
         DataService.ResetData();
+        NavManager.NavigateTo("settings");
     }
 }

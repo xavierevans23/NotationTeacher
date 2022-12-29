@@ -2,6 +2,7 @@
 
 namespace NotationTeacher
 {
+    // Service used to provide app with data on which nots have been inputed.
     public class NoteInputService
     {
         private readonly List<Note> notes;
@@ -21,6 +22,7 @@ namespace NotationTeacher
 
         public event EventHandler? NoteUpdate;
 
+        // Called when a note is pressed. (Also called when a the midi configuration changes).
         public void OnNoteUpdate()
         {
             NoteUpdate?.Invoke(this, new());

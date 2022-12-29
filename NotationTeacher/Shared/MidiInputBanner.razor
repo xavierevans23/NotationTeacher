@@ -2,6 +2,8 @@
 @inject IJSRuntime JS
 @using NotesAndScales
 
+@*Displays a banner and automatically connects to a midi keyboard and sends note events to NoteInputService.*@
+
 <h3>Using midi input</h3>
 <p>@(StatusNames[ConnectionStatus] + (ConnectionStatus == MidiConnectionStatus.Connected ? $" to {(DeviceName is not null ? DeviceName : "[name was null].")}" : ""))</p>
 <button @onclick="Connect">@(ConnectionStatus == MidiConnectionStatus.Connected ? "Reconnect" : "connect")</button>
@@ -31,6 +33,7 @@
 
     public static string? DeviceName { get; private set; } = null;
 
+    // Automatically connects to keyboard when it loads on a page.
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

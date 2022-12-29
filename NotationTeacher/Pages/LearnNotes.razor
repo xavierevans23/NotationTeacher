@@ -6,6 +6,7 @@
 
 <PageTitle>Learn Notes</PageTitle>
 
+@*Defines a div with a thick black border.*@
 <style>
     .div-box {
         border: 5px solid black;
@@ -18,12 +19,15 @@
     <MidiInputBanner></MidiInputBanner>
 </div>
 
+@*The stave display.*@
 <StaveDisplay @ref="staveDisplay"></StaveDisplay>
 
 <br />
 <button @onclick="() => GetNote(true)">Skip Note</button>
 <br />
 <br />
+
+@*Box container all previously played notes.*@
 <div class="div-box">
     @foreach (string text in feedback.Reverse())
     {
@@ -31,9 +35,9 @@
     }
 </div>
 
+@*Expandable box showing data on all the notes.*@
 <br />
 <div class="div-box">
-
     <style>
         .side-text {
             display: block;
@@ -56,6 +60,8 @@
 
     @if (dataExpanded)
     {
+        // Shows a table with the treble and bass cleff notes.
+
         <style>
             th, td {
                 padding-left: 15px;
@@ -105,6 +111,7 @@
 </div>
 <br />
 
+@*Box container options.*@
 <div class="div-box">
     <h2>Options</h2>
 
@@ -133,19 +140,22 @@
     private Note? inputNote = null;
     private DateTime timeRecieved = DateTime.Now;    
 
+    // The text telling the user if they got a note right or wrong.
+    // Prepopulated feedback queue with invisible unicode.
     private readonly Queue<string> feedback = new Queue<string>(new[] { "⠀", "⠀", "⠀", "⠀", "⠀", "⠀", "⠀" });
     private readonly Random random = new();
 
+    // Variables bound to inputs options.
     private bool useTimer = false;
     private string timerInputText = "2";
     private float timerLength => float.TryParse(timerInputText, out float time) ? time : 2;
-
     private string cleffSelectionString = "both";
 
     public void GetNote(bool requireNew)
     {
         NoteData oldNote = currentNote;
 
+        // If requireNew is on, it will try 5 times to give a different note.
         int attempts = 5;
         while (currentNote == oldNote && attempts > 0 && requireNew)
         {
@@ -210,6 +220,7 @@
         NoteInputService.NoteUpdate += RecieveUpdate;
     }
 
+    // Unsubscribe from event to avoid intercepting the notes before another component.
     public void Dispose()
     {
         NoteInputService.NoteUpdate -= RecieveUpdate;
@@ -229,11 +240,13 @@
 
     private StaveDisplay? staveDisplay;
 
+    // Anytime the screen refreshed, update the notes using javascript.
     protected override void OnAfterRender(bool firstRender)
     {
         staveDisplay?.SetNotes(new() { new Note(currentNote.Note).Name }, "q", 1, 4, "4/4", currentNote.UseTrebleCleff ? "treble" : "bass");
     }
 
+    // For the expandable data box.
     private bool dataExpanded = false;
 
     public void ToggleBox()

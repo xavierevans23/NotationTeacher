@@ -2,10 +2,12 @@
 
 namespace NotationTeacher
 {
+    // Used to store all data that needs to be saved and serialized.
     public class DataHolder
     {
         public NoteLearningData NoteLearningData { get; set; } = new();
 
+        // This must not be serialized because it refers to when this instance was created.
         [XmlIgnore]
         public DateTime TimeLoaded { get;} = DateTime.Now;
 
@@ -32,6 +34,7 @@ namespace NotationTeacher
                 }
             }
 
+            Console.WriteLine("Valid Xml was not given.");
             throw new ArgumentException("Valid Xml was not given.");
         }
     }

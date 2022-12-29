@@ -2,13 +2,15 @@
 
 namespace NotationTeacher
 {
+    // Service which provides app with a copy of the data service.
     public class DataService
     {
         public DataHolder DataHolder {get; private set;}
 
         private readonly ILocalStorageService localStorage;
-        public bool LoadedFromStorage { get; private set; } = false;        
+        public bool LoadedFromStorage { get; private set; } = false;
 
+        // Uses Blazored ILocalStorageService service.
         public DataService(ILocalStorageService storage)
         {
             localStorage = storage;

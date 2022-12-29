@@ -2,15 +2,23 @@
 
 namespace NotationTeacher
 {
+    // Represents a set of notes for testing and parameters on how they are tested.
     public class NoteLearningData
     {
         public NoteData[] TrebleNotes { get; set; }
         public NoteData[] BassNotes { get; set; }
 
+        // How many successful tests does a note need before it is considered good.
         public int GoodNoteThreshold { get; set; } = 5;
+
+        // How many past attempts should each note store.
         public int MaxAttempts { get; set; } = 5;
+
+        // How many different not good notes should be tested at one time (before waiting for the user to be better).
         public int BadNoteNumber { get; set; } = 5;
-        public int GoodNoteChance { get; set; } = 40;
+
+        // Out of 100, how often should a good note be tested.
+        public int GoodNoteChance { get; set; } = 33;
 
         public NoteLearningData()
         {
@@ -19,6 +27,7 @@ namespace NotationTeacher
 
             List<Note> notes = new();
 
+            // All notes in the treble cleff, in order of importance.
             notes.Add(new("C Natural 4"));
             notes.Add(new("D Natural 4"));
             notes.Add(new("E Natural 4"));
@@ -39,10 +48,6 @@ namespace NotationTeacher
             notes.Add(new("A Natural 5"));
             notes.Add(new("B Natural 5"));
             notes.Add(new("C Natural 6"));
-            notes.Add(new("D Natural 6"));
-            notes.Add(new("E Natural 6"));
-            notes.Add(new("F Natural 6"));
-            notes.Add(new("G Natural 6"));
 
             List<NoteData> noteData = new();
             foreach (Note note in notes)
@@ -54,6 +59,7 @@ namespace NotationTeacher
 
             notes = new();
 
+            // All notes in the bass cleff, in order of importance.
             notes.Add(new("C Natural 4"));
             notes.Add(new("B Natural 3"));
             notes.Add(new("A Natural 3"));
@@ -82,6 +88,7 @@ namespace NotationTeacher
 
         private readonly Random random = new();
 
+        // Gets the next note the user should be tested on.
         public NoteData GetNextNote(bool useTrebleCleff)
         {
             List<NoteData> notes = new();
@@ -95,6 +102,7 @@ namespace NotationTeacher
                 notes = BassNotes.ToList();
             }
 
+            // Starts by making a list of the first x bad notes, and any good notes found along the way.
             List<NoteData> goodNotes = new();
             List<NoteData> badNotes = new();
 
@@ -119,11 +127,13 @@ namespace NotationTeacher
 
             if (useGoodNotes && goodNotes.Count > 0)
             {
+                // Good notes are in order of whichever was the least recently tested.
                 goodNotes.Sort((a, b) => a.TurnsElapsed - b.TurnsElapsed);
                 return goodNotes.First();
             }
             else if (badNotes.Count > 0)
             {
+                // Bad notes are in any order.
                 return badNotes[random.Next(badNotes.Count)];
             }
             else
@@ -133,6 +143,7 @@ namespace NotationTeacher
             }
         }
 
+        // Accepts result of if a user got a note right or not.
         public void GiveResult(NoteData noteData, bool correct)
         {
             foreach (NoteData data in TrebleNotes)

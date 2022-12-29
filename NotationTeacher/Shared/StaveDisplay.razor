@@ -1,6 +1,8 @@
 ﻿@inject IJSRuntime JS
 @using NotesAndScales;
 
+@*Displays a stave on the screen.*@
+
 <center>
     <div id="@className"></div>
 </center>
@@ -9,6 +11,7 @@
 
     public void SetNotes(List<NoteLabel> notes, string noteDuration, int timeSignatureTop, int timeSignatureBottom, string timeSignatureString, string cleff)
     {
+        // Notes Must be ordered due to a how the stave rendering library works.
         notes.Sort((a, b) => new Note(a).Number - new Note(b).Number);
 
         List<string> noteNames = new();
@@ -35,6 +38,7 @@
         JS.InvokeVoidAsync("draw", className, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, cleff);
     }
 
+    // Used to ensure if multiple staves are ever on the screen they don't interfere with each other.
     private string className = RandomString(5);
 
     private static Random random = new Random();
