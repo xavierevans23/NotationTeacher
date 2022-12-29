@@ -67,7 +67,7 @@ namespace NotationTeacher
             notes.Add(new("F Natural 3"));
             notes.Add(new("E Natural 3"));
             notes.Add(new("D Natural 3"));
-            notes.Add(new("C Natural 2"));
+            notes.Add(new("C Natural 3"));
             notes.Add(new("B Natural 2"));
             notes.Add(new("A Natural 2"));
             
