@@ -137,9 +137,17 @@ namespace NotationTeacher
 
             if (useGoodNotes && goodNotes.Count > 0)
             {
-                // Good notes are in order of whichever was the least recently tested.
-                goodNotes.Sort((a, b) => a.TurnsElapsed - b.TurnsElapsed);
-                return goodNotes.First();
+                NoteData selected = goodNotes.First();
+
+                foreach (NoteData note in goodNotes)
+                {
+                    if (note.TurnsElapsed > selected.TurnsElapsed)
+                    {
+                        selected = note;
+                    }
+                }
+
+                return selected;
             }
             else if (badNotes.Count > 0)
             {
