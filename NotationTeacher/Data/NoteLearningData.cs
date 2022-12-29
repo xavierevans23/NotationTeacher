@@ -36,18 +36,22 @@ namespace NotationTeacher
             notes.Add(new("A Natural 4"));
             notes.Add(new("B Natural 4"));
             notes.Add(new("C Natural 5"));
-            
-            notes.Add(new("B Natural 3"));
-            notes.Add(new("A Natural 3"));
-            notes.Add(new("G Natural 3"));
-
             notes.Add(new("D Natural 5"));
             notes.Add(new("E Natural 5"));
+            
+            notes.Add(new("A Natural 3"));
+            notes.Add(new("B Natural 3"));
+            
             notes.Add(new("F Natural 5"));
             notes.Add(new("G Natural 5"));
             notes.Add(new("A Natural 5"));
             notes.Add(new("B Natural 5"));
+            
             notes.Add(new("C Natural 6"));
+            
+            notes.Add(new("G Natural 3"));
+            notes.Add(new("F Natural 3"));
+
 
             List<NoteData> noteData = new();
             foreach (Note note in notes)
@@ -68,14 +72,20 @@ namespace NotationTeacher
             notes.Add(new("E Natural 3"));
             notes.Add(new("D Natural 3"));
             notes.Add(new("C Natural 3"));
+            
+            notes.Add(new("D Natural 4"));
+            notes.Add(new("E Natural 4"));
+            
             notes.Add(new("B Natural 2"));
             notes.Add(new("A Natural 2"));
-            
             notes.Add(new("G Natural 2"));
             notes.Add(new("F Natural 2"));
             notes.Add(new("E Natural 2"));
             notes.Add(new("D Natural 2"));
             notes.Add(new("C Natural 2"));
+            
+            notes.Add(new("F Natural 4"));
+            notes.Add(new("G Natural 4"));
 
             noteData = new();
             foreach (Note note in notes)
