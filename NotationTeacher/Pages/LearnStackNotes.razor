@@ -1,9 +1,9 @@
-﻿@page "/learnnotes"
+﻿@page "/stacknotes"
 @using NotesAndScales
 @inject NoteInputService NoteInputService
 @inject DataService DataService
 
-<PageTitle>Learn Notes</PageTitle>
+<PageTitle>Learn Stacked Notes</PageTitle>
 
 @*Defines a div with a thick black border.*@
 <style>
@@ -22,9 +22,10 @@
 <StaveDisplay @ref="staveDisplay"></StaveDisplay>
 
 <br />
-<button @onclick="() => GetNote(true)">Skip Note</button>
+<button @onclick="GetChord">Skip Note</button>
 <br />
 <br />
+
 
 @*Box container all previously played notes.*@
 <div class="div-box">
@@ -59,7 +60,7 @@
 
     @if (dataExpanded)
     {
-        // Shows a table with the treble and bass cleff notes.
+                // Shows a table with the treble and bass cleff notes.
 
         <style>
             th, td {
@@ -130,7 +131,7 @@
         <option value="both">Both</option>
     </select>
     <br />
-    <br />    
+    <br />
 </div>
 <br />
 

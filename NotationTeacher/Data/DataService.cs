@@ -59,5 +59,17 @@ namespace NotationTeacher
                 Console.WriteLine("Saved data successfully");
             }
         }
+
+        private static DateTime lastSave = DateTime.Now;
+        
+        // Data will only save once every 10 seconds.
+        public void TrySaveData()
+        {
+            if ((DateTime.Now - lastSave).TotalSeconds > 10)
+            {
+                lastSave = DateTime.Now;
+                Task.Run(SaveData);
+            }
+        }
     }
 }

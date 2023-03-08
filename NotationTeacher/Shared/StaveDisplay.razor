@@ -9,7 +9,7 @@
 
 @code {
 
-    public void SetNotes(List<NoteLabel> notes, string noteDuration, int timeSignatureTop, int timeSignatureBottom, string timeSignatureString, string cleff)
+    public void SetNotes(List<NoteLabel> notes, string noteDuration, int timeSignatureTop, int timeSignatureBottom, string timeSignatureString, string keySignatureString, string cleff)
     {
         // Notes Must be ordered due to a how the stave rendering library works.
         notes.Sort((a, b) => new Note(a).Number - new Note(b).Number);
@@ -35,7 +35,7 @@
             }
         }
 
-        JS.InvokeVoidAsync("draw", className, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, cleff);
+        JS.InvokeVoidAsync("draw", className, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, keySignatureString, cleff);
     }
 
     // Used to ensure if multiple staves are ever on the screen they don't interfere with each other.

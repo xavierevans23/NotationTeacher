@@ -15,7 +15,7 @@
         public int TurnsElapsed { get; set; } = 1000;
 
         // How many attempts are saved. (e.g. last 5, last 10).
-        public int MaxAttempts { get; set; } = 5;
+        public int MaxAttempts { get; set; } = 8;
 
         // The last x attempts (true = correct). Stored as a list not a queue for serialization purposes.
         public List<bool> AttemptHistory { get; set; } = new();

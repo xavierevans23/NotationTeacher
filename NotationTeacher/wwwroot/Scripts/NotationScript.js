@@ -1,6 +1,6 @@
 ﻿// Given a div id, will draw note on a stave.
 
-function draw(elementID, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, cleff) {
+function draw(elementID, noteNames, noteAccidentals, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, keySignatureString, cleff) {
     clearBox(elementID);
     const {
         Renderer,
@@ -23,6 +23,9 @@ function draw(elementID, noteNames, noteAccidentals, noteDuration, timeSignature
 
     // Add a clef and time signature.
     stave.addClef(cleff).addTimeSignature(timeSignatureString);
+
+    // Add a key signature.
+    new Vex.KeySignature(keySignatureString).addToStave(stave);
     
     // Connect it to the rendering context and draw.
     stave.setContext(context).draw();
