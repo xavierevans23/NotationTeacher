@@ -1,5 +1,4 @@
 ﻿using NotesAndScales;
-using System.ComponentModel.Design;
 
 namespace NotationTeacher
 {
@@ -29,29 +28,42 @@ namespace NotationTeacher
             List<Note> notes = new()
             {
                 // All notes in the treble cleff, in order of importance.
-                new("C Natural 4"),
-                new("D Natural 4"),
-                new("E Natural 4"),
-                new("F Natural 4"),
-                new("G Natural 4"),
-                new("A Natural 4"),
-                new("B Natural 4"),
-                new("C Natural 5"),
-                new("D Natural 5"),
-                new("E Natural 5"),
-
-                new("A Natural 3"),
-                new("B Natural 3"),
-
-                new("F Natural 5"),
-                new("G Natural 5"),
-                new("A Natural 5"),
-                new("B Natural 5"),
-
-                new("C Natural 6"),
-
-                new("G Natural 3"),
-                new("F Natural 3")
+               new("C Natural 4"),
+               new("D Natural 4"),
+               new("E Natural 4"),
+               new("F Natural 4"),
+               new("G Natural 4"),
+               new("B Natural 3"),
+               new("A Natural 3"),
+               new("A Natural 4"),
+               new("B Natural 4"),
+               new("C Natural 5"),
+               new("D Natural 5"),
+               new("E Natural 5"),
+               new("F Natural 5"),
+               new("G Natural 5"),
+               new("A Natural 5"),
+               new("B Natural 5"),
+               new("C Natural 6"),
+               new("G Natural 3"),
+               new("F Natural 3"),
+               new("E Natural 3"),
+               new("D Natural 3"),
+               new("C Natural 3"),
+               new("D Natural 6"),
+               new("E Natural 6"),
+               new("F Natural 6"),
+               new("G Natural 6"),
+               new("A Natural 6"),
+               new("B Natural 6"),
+               new("C Natural 7"),
+               new("D Natural 7"),
+               new("E Natural 7"),
+               new("F Natural 7"),
+               new("G Natural 7"),
+               new("A Natural 7"),
+               new("B Natural 7"),
+               new("C Natural 8"),
             };
 
 
@@ -74,10 +86,8 @@ namespace NotationTeacher
                 new("E Natural 3"),
                 new("D Natural 3"),
                 new("C Natural 3"),
-
                 new("D Natural 4"),
                 new("E Natural 4"),
-
                 new("B Natural 2"),
                 new("A Natural 2"),
                 new("G Natural 2"),
@@ -85,9 +95,20 @@ namespace NotationTeacher
                 new("E Natural 2"),
                 new("D Natural 2"),
                 new("C Natural 2"),
-
                 new("F Natural 4"),
-                new("G Natural 4")
+                new("G Natural 4"),
+                new("A Natural 4"),
+                new("B Natural 4"),
+                new("C Natural 5"),
+                new("B Natural 1"),
+                new("A Natural 1"),
+                new("G Natural 1"),
+                new("F Natural 1"),
+                new("E Natural 1"),
+                new("D Natural 1"),
+                new("C Natural 1"),
+                new("B Natural 0"),
+                new("A Natural 0"),
             };
 
             noteData = new();
@@ -138,7 +159,7 @@ namespace NotationTeacher
 
             bool useGoodNotes = random.Next(100) <= GoodNoteChance;
 
-            if (useGoodNotes && goodNotes.Count > 0)
+            if (useGoodNotes && goodNotes.Count > 0 || badNotes.Count == 0)
             {
                 NoteData selected = goodNotes.First();
 
@@ -227,7 +248,7 @@ namespace NotationTeacher
             if (random.Next(0, 2) == 0 && key.AlternativeKeySignature is not null)
             {
                 signature = key.AlternativeKeySignature;
-            }            
+            }
 
             // Get the notes that are sharp flat.
             var accidentals = key.KeySignature.Accidentals().Select(a => a.Letter);
